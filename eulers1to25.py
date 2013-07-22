@@ -1,8 +1,26 @@
 from math import sqrt
+from timeit import default_timer
 
+def sieve():
+    """
+    Yields the sequence of prime numbers via the Sieve of Eratosthenes.
+    http://stackoverflow.com/questions/1628949/to-find-first-n-prime-numbers-in-python
+    """
+    D = {}  # map composite integers to primes witnessing their compositeness
+    q = 2   # first integer to test for primality
+    while True:
+        if q not in D:
+            yield q        # not marked composite, must be prime
+            D[q * q] = [q]   # first multiple of q not already marked
+        else:
+            for p in D[q]: # move each witness to its next multiple
+                D.setdefault(p + q, []).append(p)
+            del D[q]       # no longer need D[q], free memory
+        q += 1
 
 def problem1():
     print(sum([x for x in range(1000) if x % 3 == 0 or x % 5 == 0]))
+
 
 def problem2():
     N = 4000000
@@ -14,13 +32,13 @@ def problem2():
             a, b = b, a + b
 
     gen = fib()
-    sum = 0
+    summ = 0
     elem = next(gen)
     while elem < N:
         if elem % 2 == 0:
-            sum += elem
+            summ += elem
         elem = next(gen)
-    print(sum)
+    print(summ)
 
 
 def problem3():
@@ -106,29 +124,11 @@ def problem6():
     squares = int(all_squares(N))
     print('Answer is {}'.format(sm * sm - squares))
 
-
 def problem7():
-    def sieve():
-        """
-        Yields the sequence of prime numbers via the Sieve of Eratosthenes.
-        http://stackoverflow.com/questions/1628949/to-find-first-n-prime-numbers-in-python
-        """
-        D = {}  # map composite integers to primes witnessing their compositeness
-        q = 2   # first integer to test for primality
-        while True:
-            if q not in D:
-                yield q        # not marked composite, must be prime
-                D[q * q] = [q]   # first multiple of q not already marked
-            else:
-                for p in D[q]: # move each witness to its next multiple
-                    D.setdefault(p + q, []).append(p)
-                del D[q]       # no longer need D[q], free memory
-            q += 1
-
     gen = sieve()
     N = 10001
     prime = 0
-    for i in range(1, N+1):
+    for i in range(1, N + 1):
         prime = next(gen)
     print(prime)
 
@@ -141,30 +141,30 @@ def problem8():
     print max([reduce(lambda x, y: x*y, d[i:i+5]) for i in xrange(len(s)-4)])
     """
     string = "73167176531330624919225119674426574742355349194934" + \
-        "96983520312774506326239578318016984801869478851843" + \
-        "85861560789112949495459501737958331952853208805511" + \
-        "12540698747158523863050715693290963295227443043557" + \
-        "66896648950445244523161731856403098711121722383113" + \
-        "62229893423380308135336276614282806444486645238749" + \
-        "30358907296290491560440772390713810515859307960866" + \
-        "70172427121883998797908792274921901699720888093776" + \
-        "65727333001053367881220235421809751254540594752243" + \
-        "52584907711670556013604839586446706324415722155397" + \
-        "53697817977846174064955149290862569321978468622482" + \
-        "83972241375657056057490261407972968652414535100474" + \
-        "82166370484403199890008895243450658541227588666881" + \
-        "16427171479924442928230863465674813919123162824586" + \
-        "17866458359124566529476545682848912883142607690042" + \
-        "24219022671055626321111109370544217506941658960408" + \
-        "07198403850962455444362981230987879927244284909188" + \
-        "84580156166097919133875499200524063689912560717606" + \
-        "05886116467109405077541002256983155200055935729725" + \
-        "71636269561882670428252483600823257530420752963450"
+             "96983520312774506326239578318016984801869478851843" + \
+             "85861560789112949495459501737958331952853208805511" + \
+             "12540698747158523863050715693290963295227443043557" + \
+             "66896648950445244523161731856403098711121722383113" + \
+             "62229893423380308135336276614282806444486645238749" + \
+             "30358907296290491560440772390713810515859307960866" + \
+             "70172427121883998797908792274921901699720888093776" + \
+             "65727333001053367881220235421809751254540594752243" + \
+             "52584907711670556013604839586446706324415722155397" + \
+             "53697817977846174064955149290862569321978468622482" + \
+             "83972241375657056057490261407972968652414535100474" + \
+             "82166370484403199890008895243450658541227588666881" + \
+             "16427171479924442928230863465674813919123162824586" + \
+             "17866458359124566529476545682848912883142607690042" + \
+             "24219022671055626321111109370544217506941658960408" + \
+             "07198403850962455444362981230987879927244284909188" + \
+             "84580156166097919133875499200524063689912560717606" + \
+             "05886116467109405077541002256983155200055935729725" + \
+             "71636269561882670428252483600823257530420752963450"
 
     length = len(string)
     window = 5
     windows = {}
-    odds = range(0,7) # we don't need smaller digits
+    odds = range(0, 7) # we don't need smaller digits
     for i in range(0, length - window + 1):
         cur_window = string[i:i + window]
         windows[cur_window] = 1
@@ -178,5 +178,35 @@ def problem8():
     print(max(windows.values()))
 
 
-problem8()
+def problem9():
+    N = 1000
+    n = 200
+    for b in range(n, N):
+        for a in range(n, b):
+            c = N - b - a
+            if c <= b or c <= 0:
+                break
+            diff = c * c - b * b - a * a
+            if diff is 0:
+                print("abc = {}".format(a * b * c))
+                return
+
+
+def problem10():
+    gen = sieve()
+    N = 2000000
+    summ = 0
+    while True:
+        prime = next(gen)
+        if prime < N:
+            summ += prime
+        else:
+            break
+    print(summ)
+
+start = default_timer()
+
+problem10()
+
+print('Elapsed:{}'.format(default_timer() - start))
 
