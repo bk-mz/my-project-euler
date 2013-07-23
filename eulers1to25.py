@@ -305,19 +305,16 @@ def problem12():
     print(factors)
     print([d for d in range(1, x + 1) if x % d == 0])
 
-    def get_div_count(x, primes):
-        count = 1
-        for p in primes:
-            for i in range(0, x, p):
-                if x % i == 0:
-                    count += 1
-        return count
+    def get_div_count(x):
+        factors = set(prime_factors(x))
+        return len([d for d in range(1, x + 1) if x % d == 0 and any(d % factor for factor in factors)])
 
     x = 1
     while True:
         s = int(x * (x + 1) * 0.5)
-        factors = set(prime_factors(s))
-        if get_div_count(s, factors) > 10:
+        div_count = get_div_count(s)
+        print('{} : {} divisors'.format(s, div_count))
+        if div_count > 500:
             print('Found number with divisors = {}'.format(s))
             return
         x += 1
