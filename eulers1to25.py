@@ -1,7 +1,8 @@
 import copy
 from functools import reduce
-from math import sqrt
-from timeit import default_timer
+from itertools import chain, combinations
+from math import sqrt, floor
+from timeit import default_timer, itertools
 
 
 def sieve():
@@ -261,9 +262,70 @@ def problem11():
         maxx(diag_cuts(list(reversed(v_mirrored))))]))
 
 
+def sieve2(limit):
+    yield 2
+    sievebound = int((limit - 1) / 2)
+    sieve = [False for i in range(0, sievebound)]
+    crosslimit = int((floor(sqrt(limit)) - 1) / 2)
+    for i in range(1, crosslimit):
+        if not sieve[i]:
+            for j in range(2 * i * (i + 1), sievebound, 2 * i + 1):
+                sieve[j] = True
+
+    for i in range(1, sievebound):
+        if not sieve[i]:
+            yield 2 * i + 1
+
+
+def problem12():
+    x = 36
+
+    def prime_factors(value):
+        crosslimit = int(floor(sqrt(value)) - 1) if x > 100 else value
+        primes = sieve2(crosslimit)
+        d = []
+        prod = 1
+        while True:
+            if prod == value:
+                break
+            y = value
+            try:
+                p = next(primes)
+            except StopIteration:
+                if prod < value:
+                    d.append(int(value / prod))
+                    break
+            while y % p == 0:
+                y /= p
+                d.append(p)
+                prod *= p
+        return d
+
+    factors = set(prime_factors(x))
+    print(factors)
+    print([d for d in range(1, x + 1) if x % d == 0])
+
+    def get_div_count(x, primes):
+        count = 1
+        for p in primes:
+            for i in range(0, x, p):
+                if x % i == 0:
+                    count += 1
+        return count
+
+    x = 1
+    while True:
+        s = int(x * (x + 1) * 0.5)
+        factors = set(prime_factors(s))
+        if get_div_count(s, factors) > 10:
+            print('Found number with divisors = {}'.format(s))
+            return
+        x += 1
+
+
 start = default_timer()
 
-problem11()
+problem12()
 
 print('Elapsed:{}'.format(default_timer() - start))
 
