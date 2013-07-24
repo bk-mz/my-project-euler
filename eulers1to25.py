@@ -23,6 +23,28 @@ def sieve():
         q += 1
 
 
+def prime_factors(value):
+    crosslimit = int(floor(sqrt(value)) - 1) if value > 100 else value
+    primes = sieve2(crosslimit)
+    d = []
+    prod = 1
+    while True:
+        if prod == value:
+            break
+        y = value
+        try:
+            p = next(primes)
+        except StopIteration:
+            if prod < value:
+                d.append(int(value / prod))
+                break
+        while y % p == 0:
+            y /= p
+            d.append(p)
+            prod *= p
+    return d
+
+
 def problem1():
     print(sum([x for x in range(1000) if x % 3 == 0 or x % 5 == 0]))
 
@@ -278,42 +300,19 @@ def sieve2(limit):
 
 
 def problem12():
-    x = 36
-
-    def prime_factors(value):
-        crosslimit = int(floor(sqrt(value)) - 1) if x > 100 else value
-        primes = sieve2(crosslimit)
-        d = []
-        prod = 1
-        while True:
-            if prod == value:
-                break
-            y = value
-            try:
-                p = next(primes)
-            except StopIteration:
-                if prod < value:
-                    d.append(int(value / prod))
-                    break
-            while y % p == 0:
-                y /= p
-                d.append(p)
-                prod *= p
-        return d
-
-    factors = set(prime_factors(x))
-    print(factors)
-    print([d for d in range(1, x + 1) if x % d == 0])
 
     def get_div_count(x):
-        factors = set(prime_factors(x))
-        return len([d for d in range(1, x + 1) if x % d == 0 and any(d % factor for factor in factors)])
+        lim = int(floor(sqrt(x)) - 1)
+        count = 0
+        for i in range(2, lim):
+            if x % i == 0:
+                count += 1
+        return count * 2
 
     x = 1
     while True:
         s = int(x * (x + 1) * 0.5)
         div_count = get_div_count(s)
-        print('{} : {} divisors'.format(s, div_count))
         if div_count > 500:
             print('Found number with divisors = {}'.format(s))
             return
