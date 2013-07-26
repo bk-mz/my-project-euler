@@ -427,10 +427,35 @@ def problem13():
         summ = summ * 10 + arr[i]
     print(str(summ)[:10])
 
+def problem14():
+
+    mem = {}
+    def len_collatz(n):
+        count = 0
+        while n is not 1:
+            if n in mem.keys():
+                count += mem[n]
+                break
+            if n % 2 == 0:
+                n = int(n / 2)
+            else:
+                n = 3 * n + 1
+            count += 1
+        mem[n] = count
+        return count
+
+    X = range(13, 1000000)
+    counts = []
+    xs = []
+    for x in X:
+        counts.append(len_collatz(x))
+        xs.append(x)
+    max_length = max(counts)
+    print('{} len is {}'.format(xs[counts.index(max_length)], max_length))
 
 start = default_timer()
 
-problem13()
+problem14()
 
 print('Elapsed:{}'.format(default_timer() - start))
 
