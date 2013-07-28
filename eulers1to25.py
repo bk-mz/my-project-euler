@@ -466,15 +466,18 @@ def problem15():
     So, for nxn we have C of 2n by n, (2n)!/n!^2
     """
 
-    N = 6
     def cbc(x):
         return factorial(2 * x) // pow(factorial(x), 2)
     assert cbc(2) == 6
     print('{}'.format(cbc(20)))
 
+def problem16():
+    x = pow(2, 1000)
+    print(sum([int(i) for i in str(x)]))
+
 start = default_timer()
 
-problem15()
+problem16()
 
 print('Elapsed:{}'.format(default_timer() - start))
 
