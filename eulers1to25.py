@@ -1,7 +1,7 @@
 import copy
 from functools import reduce
 from itertools import chain, combinations
-from math import sqrt, floor
+from math import sqrt, floor, factorial
 from timeit import default_timer, itertools
 
 
@@ -453,9 +453,28 @@ def problem14():
     max_length = max(counts)
     print('{} len is {}'.format(xs[counts.index(max_length)], max_length))
 
+def problem15():
+    """
+    Okay, I'm too dumb to get that right out of my head, so I had to google:
+    http://www.robertdickau.com/manhattan.html
+    http://www.robertdickau.com/lattices.html
+
+    It is said, that the number of paths that represent the possible paths of
+    length 2n from one corner of an n-by-n grid to the opposite corner are
+    the central binomial coefficients.
+
+    So, for nxn we have C of 2n by n, (2n)!/n!^2
+    """
+
+    N = 6
+    def cbc(x):
+        return factorial(2 * x) // pow(factorial(x), 2)
+    assert cbc(2) == 6
+    print('{}'.format(cbc(20)))
+
 start = default_timer()
 
-problem14()
+problem15()
 
 print('Elapsed:{}'.format(default_timer() - start))
 
