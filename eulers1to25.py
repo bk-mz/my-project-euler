@@ -1,8 +1,6 @@
-import copy
 from functools import reduce
-from itertools import chain, combinations
 from math import sqrt, floor, factorial
-from timeit import default_timer, itertools
+from timeit import default_timer
 
 
 def sieve():
@@ -427,9 +425,10 @@ def problem13():
         summ = summ * 10 + arr[i]
     print(str(summ)[:10])
 
-def problem14():
 
+def problem14():
     mem = {}
+
     def len_collatz(n):
         count = 0
         while n is not 1:
@@ -453,6 +452,7 @@ def problem14():
     max_length = max(counts)
     print('{} len is {}'.format(xs[counts.index(max_length)], max_length))
 
+
 def problem15():
     """
     Okay, I'm too dumb to get that right out of my head, so I had to google:
@@ -468,16 +468,86 @@ def problem15():
 
     def cbc(x):
         return factorial(2 * x) // pow(factorial(x), 2)
+
     assert cbc(2) == 6
     print('{}'.format(cbc(20)))
+
 
 def problem16():
     x = pow(2, 1000)
     print(sum([int(i) for i in str(x)]))
 
+
+def problem15():
+    N = 20
+    N2 = N * N
+
+    a = reduce(lambda x, y: x * y, range(N2 - N + 1, N2 + 1))
+    b = reduce(lambda x, y: x * y, range(1, N + 1))
+    print(a // b)
+
+
+def problem17():
+    """
+
+
+    """
+    known = {
+        1: 'one',
+        2: 'two',
+        3: 'three',
+        4: 'four',
+        5: 'five',
+        6: 'six',
+        7: 'seven',
+        8: 'eight',
+        9: 'nine',
+        10: 'ten',
+        11: 'eleven',
+        12: 'twelve',
+        13: 'thirteen',
+        14: 'fourteen',
+        15: 'fifteen',
+        16: 'sixteen',
+        17: 'seventeen',
+        18: 'eighteen',
+        19: 'nineteen',
+        20: 'twenty',
+        30: 'thirty',
+        40: 'forty',
+        50: 'fifty',
+        60: 'sixty',
+        70: 'seventy',
+        80: 'eighty',
+        90: 'ninety',
+    }
+
+    def under_100():
+        sigs = [(x % 100 // 10,
+                 x % 100 % 10)
+                for x in range(1, 100)]
+        for tens, ones in sigs:
+            dec = tens * 10 + ones
+            if dec in known.keys():
+                yield known[dec]
+            else:
+                yield '{}{}'.format(known[tens * 10], known[ones])
+
+    lst = list(under_100())
+    cnt_hundred = sum(map(lambda x: len(x), lst))
+
+    print(
+        sum(
+            [len(known[x]) for x in range(1, 10)]) * 100    # 900 lines start with one, two ...
+        + (len('hundredand') * 99 + len('hundred')) * 9     # 900 lines continues with hundred or hundred
+        + 10 * cnt_hundred                                  # 1000 lines with 99 numbers written
+        + len('onethousand')                                # single one thousand
+    )
+
+
 start = default_timer()
 
-problem16()
+problem17()
 
 print('Elapsed:{}'.format(default_timer() - start))
 
