@@ -562,20 +562,31 @@ def problem18():
          [63, 66, 4, 68, 89, 53, 67, 30, 73, 16, 69, 87, 40, 31],
          [4, 62, 98, 27, 23, 9, 70, 98, 73, 93, 38, 53, 60, 4, 23]]
 
-    res = 75
-    traverse_index = 0
-    for i in range(1, len(X)):
-        arr = X[i]
-        maximum = max(arr[traverse_index], arr[traverse_index + 1])
-        print(maximum)
-        traverse_index = arr.index(maximum)
-        res += maximum
-    print(res) # wrong!
+    Y = [[3],
+         [7, 4],
+         [2, 4, 6],
+         [8, 5, 9, 3]]
 
+    def binary_tree_max_path(data, row, col):
+        vertex = data[row][col]
+        if row is len(data) - 1:
+            return vertex
+        left = binary_tree_max_path(data, row + 1, col)
+        right = binary_tree_max_path(data, row + 1, col + 1)
+        res = max(left, right) + vertex
+        return res
+
+    print(binary_tree_max_path(X, 0, 0))
+
+def problem67():
+    filename = 'triangle.txt'
+    strings = open(filename).read().splitlines()
+    # print(binary_tree_max_path([[int(y) for y in x.split()] for x in strings], 0, 0))
+    # YEP, THAT DOES NOT WORK!:) TBD later
 
 start = default_timer()
 
-problem18()
+problem67()
 
 print('Elapsed:{}'.format(default_timer() - start))
 
