@@ -578,15 +578,39 @@ def problem18():
 
     print(binary_tree_max_path(X, 0, 0))
 
-def problem67():
-    filename = 'triangle.txt'
-    strings = open(filename).read().splitlines()
-    # print(binary_tree_max_path([[int(y) for y in x.split()] for x in strings], 0, 0))
-    # YEP, THAT DOES NOT WORK!:) TBD later
+
+def problem19():
+
+    def is_leap(x):
+        if x % 400 == 0:
+            return True
+        if x % 100 == 0:
+            return False
+        if x % 4 == 0:
+            return True
+        return False
+
+    m_dur = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+    m_leap = list(m_dur)
+    m_leap[1] = 29
+
+    def get_dur(y):
+        return m_leap if is_leap(y) else m_dur
+
+    year = 1901
+    day_counter = sum(get_dur(year - 1)) + 1  # starting with monday
+    res = 0
+    while year <= 2000:
+        for dur in get_dur(year):
+            day_counter += dur
+            if day_counter % 7 == 0:
+                res += 1
+        year += 1
+
+    print(res)
 
 start = default_timer()
 
-problem67()
+problem19()
 
 print('Elapsed:{}'.format(default_timer() - start))
-
