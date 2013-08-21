@@ -580,7 +580,6 @@ def problem18():
 
 
 def problem19():
-
     def is_leap(x):
         if x % 400 == 0:
             return True
@@ -609,8 +608,13 @@ def problem19():
 
     print(res)
 
+
+def problem20():
+    print(sum([int(x) for x in str(factorial(100))]))
+
+
 start = default_timer()
 
-problem19()
+problem20()
 
 print('Elapsed:{}'.format(default_timer() - start))
