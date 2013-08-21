@@ -21,13 +21,28 @@ def sieve():
         q += 1
 
 
+def sieve2(limit):
+    yield 2
+    sievebound = int((limit - 1) / 2)
+    sieve = [False for i in range(0, sievebound)]
+    crosslimit = int((floor(sqrt(limit)) - 1) / 2)
+    for i in range(1, crosslimit):
+        if not sieve[i]:
+            for j in range(2 * i * (i + 1), sievebound, 2 * i + 1):
+                sieve[j] = True
+
+    for i in range(1, sievebound):
+        if not sieve[i]:
+            yield 2 * i + 1
+
+
 def prime_factors(value):
     crosslimit = int(floor(sqrt(value)) - 1) if value > 100 else value
     primes = sieve2(crosslimit)
     d = []
     prod = 1
     while True:
-        if prod == value:
+        if prod >= value:
             break
         y = value
         try:
@@ -280,21 +295,6 @@ def problem11():
         # okay, now to other bias (we should vertically mirror matrix and apply same functions as above)
         maxx(diag_cuts(v_mirrored)),
         maxx(diag_cuts(list(reversed(v_mirrored))))]))
-
-
-def sieve2(limit):
-    yield 2
-    sievebound = int((limit - 1) / 2)
-    sieve = [False for i in range(0, sievebound)]
-    crosslimit = int((floor(sqrt(limit)) - 1) / 2)
-    for i in range(1, crosslimit):
-        if not sieve[i]:
-            for j in range(2 * i * (i + 1), sievebound, 2 * i + 1):
-                sieve[j] = True
-
-    for i in range(1, sievebound):
-        if not sieve[i]:
-            yield 2 * i + 1
 
 
 def problem12():
@@ -613,8 +613,13 @@ def problem20():
     print(sum([int(x) for x in str(factorial(100))]))
 
 
+def problem21():
+    print(prime_factors(198))
+    for x in range(2, 10001):
+        print(x, prime_factors(x))
+
 start = default_timer()
 
-problem20()
+problem21()
 
 print('Elapsed:{}'.format(default_timer() - start))
