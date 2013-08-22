@@ -1,4 +1,5 @@
 from functools import reduce
+from itertools import chain, combinations
 from math import sqrt, floor, factorial
 from timeit import default_timer
 
@@ -58,6 +59,16 @@ def prime_factors(value):
     return d
 
 
+def factors(x):    # more straightforward approach
+    yield 1
+    mid = int(sqrt(x)) + 1
+    for i in range(2, mid + 1):
+        if x % i == 0:
+            yield i
+            yield x // i
+    yield x
+
+
 def problem1():
     print(sum([x for x in range(1000) if x % 3 == 0 or x % 5 == 0]))
 
@@ -88,8 +99,10 @@ def problem3():
         """
         http://en.wikipedia.org/wiki/Primality_test
         """
-        if x % 2 == 0: yield 2
-        if x % 3 == 0: yield 3
+        if x % 2 == 0:
+            yield 2
+        if x % 3 == 0:
+            yield 3
         k = 1
         sqrtx = sqrt(x)
         while True:
@@ -110,10 +123,10 @@ def problem3():
     if last_factor > known_factors[-1]:
         known_factors.append(last_factor)
 
-    known_factors.reverse() # start with maximum factor
+    known_factors.reverse()     # start with maximum factor
     for factor in known_factors:
         l = list(factors(factor))
-        if not l: #empty list means factor is prime
+        if not l:   # empty list means factor is prime
             print('largest prime factor is {}'.format(factor))
             break
 
@@ -205,7 +218,7 @@ def problem8():
     length = len(string)
     window = 5
     windows = {}
-    odds = range(0, 7) # we don't need smaller digits
+    odds = range(0, 7)  # we don't need smaller digits
     for i in range(0, length - window + 1):
         cur_window = string[i:i + window]
         windows[cur_window] = 1
@@ -614,9 +627,19 @@ def problem20():
 
 
 def problem21():
-    print(prime_factors(198))
-    for x in range(2, 10001):
-        print(x, prime_factors(x))
+    def amicable_sum(x):
+        return sum(factors(x)) - x
+
+    res = []
+    upper = 10001
+    for value in range(2, upper):
+        other = amicable_sum(value)
+        if other < upper and value == amicable_sum(other) and other != value:
+            res.append(value)
+            res.append(other)
+
+    print(sum(set(res)))
+
 
 start = default_timer()
 
