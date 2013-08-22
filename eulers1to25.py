@@ -1,6 +1,6 @@
 from functools import reduce
-from itertools import chain, combinations
 from math import sqrt, floor, factorial
+import string
 from timeit import default_timer
 
 
@@ -641,8 +641,22 @@ def problem21():
     print(sum(set(res)))
 
 
+def problem22():
+    import urllib.request
+
+    url = 'http://projecteuler.net/project/names.txt'
+    response = urllib.request.urlopen(url)
+    data = response.read()
+    text = data.decode('utf-8')
+    values = sorted([x.strip('\"') for x in text.split(',')])
+
+    print(sum(
+        [sum([string.ascii_lowercase.index(c) + 1 for c in value.lower()]) * (values.index(value) + 1) for value in
+         values]))
+
+
 start = default_timer()
 
-problem21()
+problem22()
 
 print('Elapsed:{}'.format(default_timer() - start))
