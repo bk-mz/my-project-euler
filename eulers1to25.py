@@ -59,14 +59,21 @@ def prime_factors(value):
     return d
 
 
-def factors(x):    # more straightforward approach
+def factors(n):
     yield 1
-    mid = int(sqrt(x)) + 1
-    for i in range(2, mid + 1):
-        if x % i == 0:
-            yield i
-            yield x // i
-    yield x
+    if n == 1:
+        return
+    r = floor(sqrt(n))
+    if r * r == n:
+        yield r
+        r -= 1
+    f, step = (3, 2) if n % 2 != 0 else (2, 1)
+    while f <= r:
+        if n % f == 0:
+            yield f
+            yield n // f
+        f += step
+    yield n
 
 
 def problem1():
@@ -655,8 +662,30 @@ def problem22():
          values]))
 
 
+def problem23():
+
+    def is_abundant(x):
+        return sum(factors(x)) > 2 * x
+
+    UPPER = 23123
+    ab = []
+    arr = range(1, UPPER + 1)
+    for n in arr:
+        if is_abundant(n):
+            ab.append(n)
+
+    sm = sum(arr)
+    vals = set()
+    for a in ab:
+        for b in ab:
+            a_b = a + b
+            if a_b <= UPPER:
+                vals.add(a_b)
+
+    print(sm - sum(vals))
+
 start = default_timer()
 
-problem22()
+problem23()
 
 print('Elapsed:{}'.format(default_timer() - start))
