@@ -663,7 +663,6 @@ def problem22():
 
 
 def problem23():
-
     def is_abundant(x):
         return sum(factors(x)) > 2 * x
 
@@ -684,8 +683,40 @@ def problem23():
 
     print(sm - sum(vals))
 
+
+def problem24():
+    """
+    http://en.wikipedia.org/wiki/Permutation#Generation_in_lexicographic_order
+    """
+
+    def find_largest_k(a):
+        k = 0
+        for i in range(0, len(a) - 1):
+            if a[i] < a[i + 1]:
+                k = i
+        return k
+
+    def find_largest_l(a, k):
+        l = 0
+        ak = a[k]
+        for i in range(0, len(a)):
+            if ak < a[i]:
+                l = i
+        return l
+
+    arr = list(map(str, range(0, 10)))
+    count = 1000000
+    for i in range(1, count):
+        k = find_largest_k(arr)
+        l = find_largest_l(arr, k)
+        arr[k], arr[l] = arr[l], arr[k]
+        arr = arr[0:k + 1] + list(reversed(arr[k + 1:len(arr)]))
+        s = ''.join(arr)
+        print('{}:{}'.format(i, s))
+
+
 start = default_timer()
 
-problem23()
+problem24()
 
 print('Elapsed:{}'.format(default_timer() - start))
