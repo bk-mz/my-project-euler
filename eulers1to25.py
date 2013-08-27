@@ -80,14 +80,15 @@ def problem1():
     print(sum([x for x in range(1000) if x % 3 == 0 or x % 5 == 0]))
 
 
+def fib():
+    a, b = 0, 1
+    while 1:
+        yield a
+        a, b = b, a + b
+
+
 def problem2():
     N = 4000000
-
-    def fib():
-        a, b = 0, 1
-        while 1:
-            yield a
-            a, b = b, a + b
 
     gen = fib()
     summ = 0
@@ -714,8 +715,19 @@ def problem24():
         print('{}:{}'.format(i, ''.join(arr)))
 
 
+def problem25():
+    gen = fib()
+
+    cur_fib = next(gen)
+    count = 0
+    while len(str(cur_fib)) < 1000:
+        count += 1
+        cur_fib = next(gen)
+    print(count)
+
+
 start = default_timer()
 
-problem24()
+problem25()
 
 print('Elapsed:{}'.format(default_timer() - start))
