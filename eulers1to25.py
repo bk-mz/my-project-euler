@@ -710,9 +710,8 @@ def problem24():
         k = find_largest_k(arr)
         l = find_largest_l(arr, k)
         arr[k], arr[l] = arr[l], arr[k]
-        arr = arr[0:k + 1] + list(reversed(arr[k + 1:len(arr)]))
-        s = ''.join(arr)
-        print('{}:{}'.format(i, s))
+        arr[k + 1:] = arr[-1:k:-1]
+        print('{}:{}'.format(i, ''.join(arr)))
 
 
 start = default_timer()
